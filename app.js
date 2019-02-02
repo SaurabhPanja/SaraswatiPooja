@@ -11,6 +11,8 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 
+//pin
+var pin = 7831;
 
 //Database Schema
 
@@ -22,12 +24,20 @@ var donarSchema = new mongoose.Schema({
 
 var Donar = mongoose.model("donars",donarSchema);
 
-//Restful routes
 
+//naive login approach
 app.get("/",function (req,res) {
-  res.redirect("/donars");
+  //can access only if logged in
+  res.render('login');
+});
+app.post("/",function(req,res){
+  if(Number(req.body.pin) === pin)
+    res.redirect('/donars');
+  else
+    res.redirect('/');
 });
 
+//Restful routes
 //index route
 app.get("/donars",function (req,res) {
   Donar.find({},function (err,data) {
@@ -129,7 +139,7 @@ app.get("*",function (req,res) {
 
 //production
 app.listen(process.env.PORT,process.env.IP,function () {
-  //console.log("Server running on port 8080");
+ //console.log("Server running on port 8080");
 });
 
 //testing
