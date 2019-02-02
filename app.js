@@ -4,8 +4,8 @@ var express        = require("express"),
     methodOverride = require("method-override"),
     mongoose       = require("mongoose");
 
-//mongoose.connect("mongodb://localhost/saraswatiPooja",{ useNewUrlParser: true });
-mongoose.connect("mongodb://SaurabhPanja:saurabh1@ds119755.mlab.com:19755/saraswatipooja",{ useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost/saraswatiPooja",{ useNewUrlParser: true });//testing
+mongoose.connect("mongodb://SaurabhPanja:saurabh1@ds119755.mlab.com:19755/saraswatipooja",{ useNewUrlParser: true });//production
 app.set("view engine","ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -127,6 +127,12 @@ app.get("*",function (req,res) {
   res.send("Error 404");
 });
 
+//production
 app.listen(process.env.PORT,process.env.IP,function () {
   //console.log("Server running on port 8080");
 });
+
+//testing
+// app.listen(8080,function(req,res){
+//   console.log('Server running on port 8080');
+// });
