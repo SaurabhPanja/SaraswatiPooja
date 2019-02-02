@@ -1,0 +1,26 @@
+<% include ./partials/header.ejs %>
+<form action="/donars/<%=donars._id%>?_method=PUT" method="post">
+  <div class="form-group">
+    <label for="title">Name</label>
+    <input type="text" class="form-control" name="username" value="<%=donars.name%>" required>
+  </div>
+  <div class="form-group">
+    <label for="image">Amount</label>
+    <input type="number" class="form-control" name="amount" value="<%=donars.amount%>"  required>
+  </div>
+  <div class="form-group">
+    <label for="paid">Paid ?</label>
+    <br>
+    <% if(donars.paid){%>
+      Yes <input type="radio" name="paid" value=true required checked>
+      No <input type="radio" name="paid" value=false>
+      <%} else{%>
+      Yes <input type="radio" name="paid" value=true required>
+      No <input type="radio" name="paid" value=false checked>
+      <%}%>
+
+  </div>
+  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+</form>
+
+<% include ./partials/footer.ejs %>

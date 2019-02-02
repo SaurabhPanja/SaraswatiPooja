@@ -1,0 +1,57 @@
+<% include ./partials/header.ejs %>
+<h5 class="display-3 text-center text-underline border-bottom"><%=blog.title%></h5>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6">
+      <img id="show-image" class="img-fluid" src="<%=blog.image%>">
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6">
+      <p class="lead">
+        <%=blog.description%>
+      </p>
+      <blockquote class="blockquote text-right">
+          <small>Published on</small>
+          <footer class="blockquote-footer">
+              <small><%=blog.created.toDateString() %></small>
+          </footer>
+      </blockquote>
+      <div class="row">
+        <div class="col-xs-6 mx-auto">
+            <a class="btn btn-warning btn-lg" href="/donars/<%=donars._id%>/edit">
+              <i class="far fa-edit"></i> Update
+            </a>
+        </div>
+        <div class="col-xs-6 mx-auto">
+            <a class="btn btn-danger btn-lg" href="/donars/<%=donars._id%>/delete" data-toggle="modal" data-target="#exampleModalCenter">
+              <i class="far fa-trash-alt"></i> Delete
+            </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Are you sure you want to DELETE this ?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Blog once deleted can not be retrieved again!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+          <form action="/blogs/<%=blog._id%>?_method=DELETE" method="post">
+            <button type="submit" class="btn btn-danger">Yes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% include ./partials/footer.ejs %>

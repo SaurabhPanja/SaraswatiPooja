@@ -1,0 +1,19 @@
+<% include ./partials/header.ejs %>
+<form action="/donars" method="post">
+  <div class="form-group">
+    <label for="title">Name</label>
+    <input type="text" class="form-control" name="username" required >
+  </div>
+  <div class="form-group">
+    <label for="image">Amount</label>
+    <input type="number" class="form-control" name="amount" required>
+  </div>
+  <div class="form-group">
+    <label for="paid">Paid ?</label>
+    Yes <input type="radio" name="paid" value=true required>
+    No <input type="radio" name="paid" value=false>
+  </div>
+  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+</form>
+
+<% include ./partials/footer.ejs %>
