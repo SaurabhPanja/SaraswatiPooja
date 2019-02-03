@@ -28,14 +28,14 @@ var Donar = mongoose.model("donars",donarSchema);
 //naive login approach
 app.get("/",function (req,res) {
   //can access only if logged in
-  res.render('login');
+  res.redirect('/donars');
 });
-app.post("/",function(req,res){
-  if(Number(req.body.pin) === pin)
-    res.redirect('/donars');
-  else
-    res.redirect('/');
-});
+// app.post("/",function(req,res){
+//   if(Number(req.body.pin) === pin)
+//     res.redirect('/donars');
+//   else
+//     res.redirect('/');
+// });
 
 //Restful routes
 //index route
