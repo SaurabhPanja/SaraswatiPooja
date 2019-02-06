@@ -8,8 +8,8 @@ var express               = require("express"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose");
 
-//mongoose.connect("mongodb://localhost/saraswatiPooja",{ useNewUrlParser: true });//testing
-mongoose.connect("mongodb://SaurabhPanja:saurabh1@ds119755.mlab.com:19755/saraswatipooja",{ useNewUrlParser: true });//production
+mongoose.connect("mongodb://localhost/saraswatiPooja",{ useNewUrlParser: true });//testing
+//mongoose.connect("mongodb://SaurabhPanja:saurabh1@ds119755.mlab.com:19755/saraswatipooja",{ useNewUrlParser: true });//production
 
 //Database Schema
 
