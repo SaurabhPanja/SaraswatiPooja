@@ -1,18 +1,15 @@
-var express        = require("express"),
-    app            = express(),
-    bodyParser     = require("body-parser"),
-    methodOverride = require("method-override"),
-    mongoose       = require("mongoose");
+var express               = require("express"),
+    app                   = express(),
+    passport              = require("passport"),
+    bodyParser            = require("body-parser"),
+    methodOverride        = require("method-override"),
+    mongoose              = require("mongoose"),
+    User                  = require("./models/user"),
+    LocalStrategy         = require("passport-local"),
+    passportLocalMongoose = require("passport-local-mongoose");
 
 //mongoose.connect("mongodb://localhost/saraswatiPooja",{ useNewUrlParser: true });//testing
 mongoose.connect("mongodb://SaurabhPanja:saurabh1@ds119755.mlab.com:19755/saraswatipooja",{ useNewUrlParser: true });//production
-app.set("view engine","ejs");
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(methodOverride("_method"));
-
-//pin
-var pin = 7831;
 
 //Database Schema
 
@@ -23,7 +20,25 @@ var donarSchema = new mongoose.Schema({
 });
 
 var Donar = mongoose.model("donars",donarSchema);
+//app initialization
 
+
+app.set("view engine","ejs");
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
+app.use(require("express-session")({
+    secret: "Amra sobai kori Saraswati Pooja",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 //naive login approach
 app.get("/",function (req,res) {
@@ -37,9 +52,33 @@ app.get("/",function (req,res) {
 //     res.redirect('/');
 // });
 
+//login
+app.get('/login',function(req,res){
+  res.render('login');
+});
+
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login"
+}) ,function(req, res){
+});
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/login");
+});
+
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
+
 //Restful routes
 //index route
-app.get("/donars",function (req,res) {
+app.get("/donars",isLoggedIn,function (req,res) {
   Donar.find({},function (err,data) {
     if (err) {
       console.log(err);
@@ -60,11 +99,11 @@ app.get("/donars",function (req,res) {
 //   });
 // });
 //new
-app.get("/donars/new",function (req,res) {
+app.get("/donars/new",isLoggedIn,function (req,res) {
   res.render("new");
 });
 //create route
-app.post("/donars",function (req,res) {
+app.post("/donars",isLoggedIn,function (req,res) {
   Donar.create({
     name   : req.body.username,
     amount : req.body.amount,
@@ -79,7 +118,7 @@ app.post("/donars",function (req,res) {
   });
 });
 // update route
-app.put("/donars/:id",function (req,res) {
+app.put("/donars/:id",isLoggedIn,function (req,res) {
   Donar.findByIdAndUpdate(req.params.id,req.body,function (err,data) {
     if (err) {
       console.log(err);
@@ -100,7 +139,7 @@ app.put("/donars/:id",function (req,res) {
 //   });
 // });
 //edit route
-app.get("/donars/:id/edit",function (req,res) {
+app.get("/donars/:id/edit",isLoggedIn,function (req,res) {
   Donar.findById(req.params.id,function (err,data) {
     if (err) {
       console.log(err);
@@ -113,7 +152,7 @@ app.get("/donars/:id/edit",function (req,res) {
 // //else if
 
 //Paid
-app.get('/showPaid',function(req,res){
+app.get('/showPaid',isLoggedIn,function(req,res){
   Donar.find({paid:true},function(err,data){
     if(err){
       console.log(err);
@@ -123,7 +162,7 @@ app.get('/showPaid',function(req,res){
   })
 });
 //unpaid
-app.get('/showUnpaid',function(req,res){
+app.get('/showUnpaid',isLoggedIn,function(req,res){
   Donar.find({paid:false},function(err,data){
     if(err){
       console.log(err);
@@ -138,11 +177,11 @@ app.get("*",function (req,res) {
 });
 
 //production
-app.listen(process.env.PORT,process.env.IP,function () {
- //console.log("Server running on port 8080");
-});
+// app.listen(process.env.PORT,process.env.IP,function () {
+//  //console.log("Server running on port 8080");
+// });
 
 //testing
-// app.listen(8080,function(req,res){
-//   console.log('Server running on port 8080');
-// });
+app.listen(8080,function(req,res){
+  console.log('Server running on port 8080');
+});

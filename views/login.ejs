@@ -21,10 +21,11 @@
   </head>
   <body>
     <div class="container">
-<form action="/" method="post">
+<form action="/login" method="post">
   <div class="form-group text-center">
-    <label for="pin">Enter Pin :</label>
-    <input type="number" class="form-control" name="pin" required>
+    <input type="text" name="username" value="Rinkesh Mandal" hidden>
+    <label for="password">Hello! Password please</label>
+    <input type="password" class="form-control" name="password" required>
   </div>
   <button type="submit" class="btn btn-primary btn-block">Submit</button>
 </form>
